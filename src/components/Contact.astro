@@ -11,6 +11,10 @@ const topics = ['General enquiry', 'Sales & pricing', 'Support', 'Partnerships']
         Questions about Pagistry, pricing, or a custom plan? Send us a note and we'll
         get back to you within one business day.
       </p>
+      <p class="contact__email">
+        Prefer email?
+        <a href="mailto:alexandyrfreelance@gmail.com">alexandyrfreelance@gmail.com</a>
+      </p>
     </div>
 
     <form class="contact__form" novalidate data-reveal style="--reveal-delay:120ms">
@@ -263,6 +267,18 @@ const topics = ['General enquiry', 'Sales & pricing', 'Support', 'Partnerships']
     color: var(--text-body);
     margin: 0;
     max-width: 34em;
+  }
+  .contact__email {
+    font-size: 15px;
+    color: var(--text-body);
+    margin: 18px 0 0;
+
+    a {
+      color: var(--indigo);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
   }
 
   /* Form card */
