@@ -1,4 +1,5 @@
 # Pagistry — Marketing Site
+[<img width="1498" height="775" alt="Screenshot 2026-06-24 at 20 29 43" src="https://github.com/user-attachments/assets/51ea508f-1504-4f9f-9239-ba880ba9aac1" />](https://pagistry.com/)
 
 The marketing landing page for **Pagistry**, a no-code page/site builder with a
 built-in CMS and an AI that generates sections, components, and entire pages.
