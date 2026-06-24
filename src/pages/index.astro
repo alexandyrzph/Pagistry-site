@@ -13,20 +13,23 @@ import Footer from '../components/Footer.astro';
 <Layout>
   <Hero />
 
-  <!-- Product editor mock, lifted to overlap the bottom of the hero band -->
-  <section class="showcase">
-    <div class="container">
-      <div class="showcase__mock" data-reveal="scale">
-        <EditorMock />
+  <main>
+    <!-- Product editor mock, lifted to overlap the bottom of the hero band -->
+    <section class="showcase">
+      <div class="container">
+        <div class="showcase__mock" data-reveal="scale">
+          <EditorMock />
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <Features />
-  <HowItWorks />
-  <Faq />
-  <Contact />
-  <Cta />
+    <Features />
+    <HowItWorks />
+    <Faq />
+    <Contact />
+    <Cta />
+  </main>
+
   <Footer />
 </Layout>
 
@@ -44,12 +47,10 @@ import Footer from '../components/Footer.astro';
     margin-right: auto;
   }
 
+  /* The editor mock is a desktop-scale asset — hide it on mobile. */
   @media (max-width: 900px) {
     .showcase {
-      padding: 0 0 56px;
-    }
-    .showcase__mock {
-      margin-top: -24px;
+      display: none;
     }
   }
 </style>

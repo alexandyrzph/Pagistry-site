@@ -1,5 +1,11 @@
 ---
 import '../styles/global.scss';
+// Self-hosted variable fonts (same-origin, inlined @font-face → no render-block)
+import '@fontsource-variable/bricolage-grotesque/wght.css';
+import '@fontsource-variable/geist/wght.css';
+// Hashed URLs of the latin subsets so we can preload the above-the-fold fonts
+import bricolageWoff2 from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url';
+import geistWoff2 from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -20,19 +26,16 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Preload the above-the-fold font subsets -->
+    <link rel="preload" href={bricolageWoff2} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={geistWoff2} as="font" type="font/woff2" crossorigin />
+
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
 
-    <!-- Fonts: Bricolage Grotesque (display) + Geist (body) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body>
     <slot />

@@ -16,7 +16,7 @@
   --ink: #16161d;
   --text-body: #55555f;
   --text-muted: #9a9aa3;
-  --footer-muted: #6e6e78;
+  --footer-muted: #909099; // 4.5:1+ on the dark footer (was #6e6e78 = 3.56:1)
   --footer-link: #c4c4cc;
   --dark-card-body: #a3a3ad;
 
@@ -51,9 +51,9 @@
   --content-max: 1200px;
   --pad-x: 56px;
 
-  // Type
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-body: 'Geist', sans-serif;
+  // Type (self-hosted via @fontsource — no render-blocking third party)
+  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Geist Variable', 'Geist', system-ui, sans-serif;
 
   // Motion
   --transition: 150ms ease;

@@ -11,17 +11,6 @@ const topics = ['General enquiry', 'Sales & pricing', 'Support', 'Partnerships']
         Questions about Pagistry, pricing, or a custom plan? Send us a note and we'll
         get back to you within one business day.
       </p>
-
-      <ul class="contact__meta">
-        <li>
-          <span class="contact__meta-icon" aria-hidden="true">✉</span>
-          <a href="mailto:hello@pagistry.com">hello@pagistry.com</a>
-        </li>
-        <li>
-          <span class="contact__meta-icon" aria-hidden="true">◷</span>
-          <span>Mon–Fri · 9:00–18:00</span>
-        </li>
-      </ul>
     </div>
 
     <form class="contact__form" novalidate data-reveal style="--reveal-delay:120ms">
@@ -43,23 +32,67 @@ const topics = ['General enquiry', 'Sales & pricing', 'Support', 'Partnerships']
           </label>
         </div>
 
-        <label class="field">
-          <span class="field__label">What's it about?</span>
-          <div class="select-wrap">
-            <select name="topic">
-              {topics.map((t) => <option value={t}>{t}</option>)}
-            </select>
-            <svg class="select-chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-              <path
-                d="M2.5 4.5 6 8l3.5-3.5"
+        <div class="field">
+          <span class="field__label" id="topic-label">What's it about?</span>
+          <div class="cselect">
+            <button
+              type="button"
+              class="cselect__trigger"
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              aria-controls="topic-list"
+              aria-labelledby="topic-label"
+            >
+              <span class="cselect__value">{topics[0]}</span>
+              <svg
+                class="cselect__chev"
+                viewBox="0 0 16 16"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="1.6"
                 stroke-linecap="round"
-                stroke-linejoin="round"></path>
-            </svg>
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 6l4 4 4-4" />
+              </svg>
+            </button>
+            <ul
+              class="cselect__list"
+              id="topic-list"
+              role="listbox"
+              aria-labelledby="topic-label"
+              tabindex="-1"
+            >
+              {
+                topics.map((t, i) => (
+                  <li
+                    class="cselect__option"
+                    id={`topic-opt-${i}`}
+                    role="option"
+                    data-value={t}
+                    aria-selected={i === 0 ? 'true' : 'false'}
+                  >
+                    <span>{t}</span>
+                    <svg
+                      class="cselect__check"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M13.5 4.5l-7 7L3 8" />
+                    </svg>
+                  </li>
+                ))
+              }
+            </ul>
+            <input type="hidden" name="topic" value={topics[0]} />
           </div>
-        </label>
+        </div>
 
         <label class="field">
           <span class="field__label">Message</span>
@@ -98,6 +131,98 @@ const topics = ['General enquiry', 'Sales & pricing', 'Support', 'Partnerships']
       if (success) success.hidden = false;
     });
   }
+
+  // ---- Custom select dropdown (replaces the native <select>) ----
+  document.querySelectorAll<HTMLElement>('.cselect').forEach((cs) => {
+    const trigger = cs.querySelector<HTMLButtonElement>('.cselect__trigger');
+    const list = cs.querySelector<HTMLElement>('.cselect__list');
+    const valueEl = cs.querySelector<HTMLElement>('.cselect__value');
+    const hidden = cs.querySelector<HTMLInputElement>('input[type="hidden"]');
+    const options = Array.from(cs.querySelectorAll<HTMLElement>('.cselect__option'));
+    if (!trigger || !list || !valueEl || !options.length) return;
+
+    let active = Math.max(
+      0,
+      options.findIndex((o) => o.getAttribute('aria-selected') === 'true'),
+    );
+
+    const isOpen = () => cs.classList.contains('is-open');
+    const setActive = (i: number) => {
+      active = Math.max(0, Math.min(options.length - 1, i));
+      options.forEach((o, idx) => o.classList.toggle('is-active', idx === active));
+      list.setAttribute('aria-activedescendant', options[active].id);
+      options[active].scrollIntoView({ block: 'nearest' });
+    };
+    const open = () => {
+      cs.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+      setActive(options.findIndex((o) => o.getAttribute('aria-selected') === 'true'));
+    };
+    const close = () => {
+      cs.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+      list.removeAttribute('aria-activedescendant');
+      options.forEach((o) => o.classList.remove('is-active'));
+    };
+    const select = (i: number) => {
+      options.forEach((o, idx) =>
+        o.setAttribute('aria-selected', idx === i ? 'true' : 'false'),
+      );
+      const val = options[i].dataset.value || '';
+      valueEl.textContent = val;
+      if (hidden) hidden.value = val;
+      close();
+      trigger.focus();
+    };
+
+    trigger.addEventListener('click', () => (isOpen() ? close() : open()));
+    options.forEach((o, i) => {
+      o.addEventListener('click', () => select(i));
+      o.addEventListener('mousemove', () => setActive(i));
+    });
+    trigger.addEventListener('keydown', (e) => {
+      if (!isOpen()) {
+        if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
+          e.preventDefault();
+          open();
+        }
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          setActive(active + 1);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          setActive(active - 1);
+          break;
+        case 'Home':
+          e.preventDefault();
+          setActive(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          setActive(options.length - 1);
+          break;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          select(active);
+          break;
+        case 'Escape':
+          e.preventDefault();
+          close();
+          break;
+        case 'Tab':
+          close();
+          break;
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!cs.contains(e.target as Node)) close();
+    });
+  });
 </script>
 
 <style lang="scss">
@@ -136,38 +261,8 @@ const topics = ['General enquiry', 'Sales & pricing', 'Support', 'Partnerships']
     font-size: 16.5px;
     line-height: 1.55;
     color: var(--text-body);
-    margin: 0 0 30px;
-    max-width: 34em;
-  }
-  .contact__meta {
-    list-style: none;
     margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .contact__meta li {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 15px;
-    color: var(--text-body);
-  }
-  .contact__meta a:hover {
-    color: var(--indigo);
-  }
-  .contact__meta-icon {
-    flex: none;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: var(--lavender-surface);
-    color: var(--indigo);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
+    max-width: 34em;
   }
 
   /* Form card */
@@ -206,8 +301,7 @@ const topics = ['General enquiry', 'Sales & pricing', 'Support', 'Partnerships']
   }
 
   .field input,
-  .field textarea,
-  .field select {
+  .field textarea {
     width: 100%;
     font-family: inherit;
     font-size: 15px;
@@ -230,30 +324,123 @@ const topics = ['General enquiry', 'Sales & pricing', 'Support', 'Partnerships']
     color: #9a9aa3;
   }
   .field input:focus,
-  .field textarea:focus,
-  .field select:focus {
+  .field textarea:focus {
     outline: none;
     background: #fff;
     border-color: var(--indigo);
     box-shadow: 0 0 0 4px rgba(91, 61, 245, 0.14);
   }
 
-  .select-wrap {
+  /* Custom dropdown (styled replacement for the native <select>) */
+  .cselect {
     position: relative;
-  }
-  .select-wrap select {
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-    padding-right: 38px;
-  }
-  .select-chev {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-body);
-    pointer-events: none;
+
+    &__trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--ink);
+      text-align: left;
+      background: var(--surface-gray);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 13px 15px;
+      cursor: pointer;
+      transition:
+        border-color var(--transition),
+        background var(--transition),
+        box-shadow var(--transition);
+    }
+
+    &__chev {
+      width: 16px;
+      height: 16px;
+      flex: none;
+      color: var(--text-body);
+      transition: transform var(--transition);
+    }
+
+    &.is-open &__trigger,
+    &__trigger:focus-visible {
+      outline: none;
+      background: #fff;
+      border-color: var(--indigo);
+      box-shadow: 0 0 0 4px rgba(91, 61, 245, 0.14);
+    }
+    &.is-open &__chev {
+      transform: rotate(180deg);
+    }
+
+    &__list {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      z-index: 30;
+      margin: 0;
+      padding: 6px;
+      list-style: none;
+      background: #fff;
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      box-shadow: 0 18px 44px -20px rgba(16, 16, 22, 0.28);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px) scale(0.98);
+      transform-origin: top center;
+      transition:
+        opacity 0.2s ease,
+        transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0s linear 0.28s;
+    }
+    &.is-open &__list {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition:
+        opacity 0.2s ease,
+        transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0s;
+    }
+
+    &__option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 14.5px;
+      color: var(--ink);
+      cursor: pointer;
+      transition:
+        background var(--transition),
+        color var(--transition);
+
+      &:hover,
+      &.is-active {
+        background: var(--lavender-surface);
+      }
+      &[aria-selected='true'] {
+        color: var(--indigo);
+        font-weight: 600;
+      }
+    }
+
+    &__check {
+      width: 16px;
+      height: 16px;
+      flex: none;
+      color: var(--indigo);
+      opacity: 0;
+    }
+    &__option[aria-selected='true'] &__check {
+      opacity: 1;
+    }
   }
 
   .form-submit {

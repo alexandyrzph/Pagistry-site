@@ -11,6 +11,8 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.2.10",
+    "@fontsource-variable/geist": "^5.2.9",
     "astro": "^5.6.1"
   },
   "devDependencies": {
