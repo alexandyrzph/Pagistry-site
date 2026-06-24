@@ -1,0 +1,65 @@
+---
+interface Props {
+  /** "onIndigo" = white box w/ indigo cells (hero nav); "onDark" = indigo box w/ white cells (footer) */
+  variant?: 'onIndigo' | 'onDark';
+}
+
+const { variant = 'onIndigo' } = Astro.props;
+
+// cell colors per variant, in 2x2 reading order
+const cells =
+  variant === 'onDark'
+    ? ['#fff', '#c9c0ff', '#c9c0ff', '#fff']
+    : ['#5b3df5', '#c9c0ff', '#c9c0ff', '#5b3df5'];
+---
+
+<a href="/" class={`logo logo--${variant}`} aria-label="Pagistry home">
+  <span class="logo__glyph" aria-hidden="true">
+    {cells.map((c) => <i style={`background:${c}`}></i>)}
+  </span>
+  <span class="logo__word">Pagistry</span>
+</a>
+
+<style lang="scss">
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+  }
+
+  .logo__glyph {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5px;
+    border-radius: var(--r-glyph);
+  }
+
+  .logo__glyph i {
+    border-radius: 1.5px;
+  }
+
+  .logo__word {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* Hero / on-indigo: white box, indigo cells */
+  .logo--onIndigo .logo__glyph {
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    background: #fff;
+  }
+
+  /* Footer / on-dark: indigo box, white cells, slightly larger */
+  .logo--onDark .logo__glyph {
+    width: 26px;
+    height: 26px;
+    padding: 4.5px;
+    background: var(--indigo);
+  }
+  .logo--onDark .logo__word {
+    font-size: 20px;
+  }
+</style>

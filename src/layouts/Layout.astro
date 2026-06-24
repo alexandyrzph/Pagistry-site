@@ -1,0 +1,117 @@
+---
+import '../styles/global.scss';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Pagistry — Ship the website in your head',
+  description = 'The no-code builder with a real CMS and an AI that writes whole pages. Drag, prompt, publish.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts: Bricolage Grotesque (display) + Geist (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+
+    <!-- Branded overlay shown while navigating to the app -->
+    <div class="leave-overlay" aria-hidden="true">
+      <div class="leave-overlay__inner">
+        <div class="leave-brand">
+          <span class="leave-brand__glyph"><i></i><i></i><i></i><i></i></span>
+          <span class="leave-brand__word">Pagistry</span>
+        </div>
+        <p class="leave-overlay__text">
+          Taking you to Pagistry<span class="leave-dots"><i></i><i></i><i></i></span>
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Reveal elements as they scroll into view.
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduce || !('IntersectionObserver' in window)) {
+        els.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+        );
+        els.forEach((el) => io.observe(el));
+      }
+    </script>
+
+    <script>
+      // Exit transition for external app links. Native cross-document view
+      // transitions are same-origin only, so we fade the page out, then go.
+      import { SIGNUP_URL } from '../config';
+
+      const appOrigin = new URL(SIGNUP_URL).origin;
+      const reduceLeave = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      document.addEventListener('click', (e) => {
+        // ignore modified / non-primary clicks so "open in new tab" still works
+        if (e.defaultPrevented || e.button !== 0) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+        const link = (e.target as HTMLElement | null)?.closest('a');
+        if (!link || (link.target && link.target !== '_self')) return;
+
+        let dest: URL;
+        try {
+          dest = new URL(link.href);
+        } catch {
+          return;
+        }
+        if (dest.origin !== appOrigin) return;
+
+        e.preventDefault();
+        if (reduceLeave) {
+          window.location.href = link.href;
+          return;
+        }
+        document.documentElement.classList.add('page-leaving');
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, 450);
+      });
+
+      // Clear the fade if the page is restored from the back/forward cache.
+      window.addEventListener('pageshow', () => {
+        document.documentElement.classList.remove('page-leaving');
+      });
+    </script>
+  </body>
+</html>

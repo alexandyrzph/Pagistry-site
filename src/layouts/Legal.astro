@@ -1,0 +1,133 @@
+---
+import Layout from './Layout.astro';
+import Logo from '../components/Logo.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  heading: string;
+  updated: string;
+}
+const { title, heading, updated } = Astro.props;
+---
+
+<Layout title={title}>
+  <header class="legal-nav">
+    <div class="container legal-nav__inner">
+      <Logo variant="onDark" />
+      <a href="/" class="legal-nav__back">← Back to home</a>
+    </div>
+  </header>
+
+  <main class="legal">
+    <div class="container">
+      <div class="legal__inner">
+        <p class="legal__eyebrow">Legal</p>
+        <h1 class="legal__title">{heading}</h1>
+        <p class="legal__updated">Last updated {updated}</p>
+        <div class="legal__body">
+          <slot />
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style lang="scss">
+  .legal-nav {
+    border-bottom: 1px solid var(--border-light);
+    background: #fff;
+  }
+  .legal-nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+  .legal-nav__back {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--text-body);
+    transition: color var(--transition);
+  }
+  .legal-nav__back:hover {
+    color: var(--indigo);
+  }
+
+  .legal {
+    padding: 64px 0 88px;
+    background: #fff;
+  }
+  .legal__inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .legal__eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--indigo);
+    margin: 0 0 14px;
+  }
+  .legal__title {
+    font-family: var(--font-display);
+    font-size: 48px;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    font-weight: 700;
+    margin: 0 0 12px;
+  }
+  .legal__updated {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    margin: 0 0 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .legal__body :global(h2) {
+    font-family: var(--font-display);
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 40px 0 14px;
+  }
+  .legal__body :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .legal__body :global(p) {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-body);
+    margin: 0 0 16px;
+  }
+  .legal__body :global(ul) {
+    margin: 0 0 16px;
+    padding-left: 22px;
+  }
+  .legal__body :global(li) {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-body);
+    margin-bottom: 6px;
+  }
+  .legal__body :global(a) {
+    color: var(--indigo);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .legal {
+      padding: 48px 0 64px;
+    }
+    .legal__title {
+      font-size: 36px;
+    }
+  }
+</style>

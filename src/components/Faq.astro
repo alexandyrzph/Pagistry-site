@@ -1,0 +1,97 @@
+---
+// Static cards, matching the mock (the handoff notes accordions are optional).
+const faqs = [
+  {
+    q: 'Do I need to code?',
+    a: "No — it's fully visual, with AI handling the heavy lifting.",
+  },
+  {
+    q: 'What can AI generate?',
+    a: 'Sections, components, or entire pages from a prompt.',
+  },
+  {
+    q: 'Custom domain?',
+    a: 'Yes, connect any domain and publish in one click.',
+  },
+  {
+    q: 'Free plan?',
+    a: 'Yes — start free, no credit card required.',
+  },
+];
+---
+
+<section class="faq" id="faq">
+  <div class="container">
+    <h2 class="faq__title" data-reveal>FAQ</h2>
+    <div class="faq__grid">
+      {
+        faqs.map((f, i) => (
+          <article class="faq__card" data-reveal style={`--reveal-delay:${i * 75}ms`}>
+            <h3 class="faq__q">{f.q}</h3>
+            <p class="faq__a">{f.a}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  .faq {
+    padding: 84px 0;
+
+    &__title {
+      font-family: var(--font-display);
+      font-size: 48px;
+      letter-spacing: -0.035em;
+      font-weight: 700;
+      margin: 0 0 40px;
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    &__card {
+      background: var(--surface-gray);
+      border-radius: var(--r-card-sm);
+      padding: 24px;
+      transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
+      }
+    }
+
+    &__q {
+      font-size: 17px;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    &__a {
+      font-size: 14.5px;
+      color: var(--text-body);
+      line-height: 1.55;
+      margin: 0;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .faq {
+      padding: 64px 0;
+
+      &__title {
+        font-size: 36px;
+      }
+      &__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+</style>

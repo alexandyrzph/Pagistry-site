@@ -1,0 +1,179 @@
+---
+import Nav from './Nav.astro';
+import { SIGNUP_URL } from '../config';
+---
+
+<header class="hero">
+  <div class="grid-overlay"></div>
+
+  <div class="container hero__inner">
+    <Nav />
+
+    <div class="hero__content">
+      <div class="hero__eyebrow" data-reveal>
+        <span aria-hidden="true">✦</span> Generate sections, components &amp; pages with AI
+      </div>
+      <h1 class="hero__title" data-reveal style="--reveal-delay:90ms">Ship the website<br />in your head.</h1>
+      <p class="hero__sub" data-reveal style="--reveal-delay:180ms">
+        The no-code builder with a real CMS and an AI that writes whole pages. Drag,
+        prompt, publish.
+      </p>
+      <div class="hero__cta" data-reveal style="--reveal-delay:270ms">
+        <a href={SIGNUP_URL} class="btn btn-dark">Start building free →</a>
+        <a href="#features" class="btn btn-ghost">Learn more</a>
+      </div>
+    </div>
+
+    <!-- Decorative floating mock cards -->
+    <div class="float-card float-card--left" aria-hidden="true">
+      <div class="bar bar--a"></div>
+      <div class="bar bar--b"></div>
+      <div class="bar bar--c"></div>
+    </div>
+    <div class="float-card float-card--right" aria-hidden="true">
+      <div class="thumb"></div>
+      <div class="bar bar--d"></div>
+    </div>
+  </div>
+</header>
+
+<style lang="scss">
+  .hero {
+    position: relative;
+    background: var(--indigo);
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .hero__inner {
+    position: relative;
+  }
+
+  .hero__content {
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 72px 0 92px;
+  }
+
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--on-indigo-fill);
+    padding: 7px 15px;
+    border-radius: var(--r-pill);
+    font-size: 13.5px;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: 84px;
+    line-height: 0.97;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+    margin: 0 0 26px;
+  }
+
+  .hero__sub {
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--on-indigo-sub);
+    margin: 0 auto 38px;
+    max-width: 30em;
+  }
+
+  .hero__cta {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Floating cards ------------------------------------------ */
+  .float-card {
+    position: absolute;
+    background: #fff;
+    border-radius: var(--r-button);
+    box-shadow: var(--shadow-float);
+    animation: pgFloat 6s ease-in-out infinite;
+  }
+  .float-card--left {
+    left: 70px;
+    top: 140px;
+    width: 150px;
+    padding: 12px 14px;
+    --r: -7deg;
+    animation-duration: 6s;
+  }
+  .float-card--right {
+    right: 64px;
+    top: 200px;
+    width: 120px;
+    padding: 12px;
+    --r: 6deg;
+    animation-duration: 7s;
+    animation-delay: 1s;
+  }
+
+  .bar {
+    border-radius: 3px;
+  }
+  .bar--a {
+    height: 7px;
+    width: 60%;
+    background: #e6e6ea;
+    margin-bottom: 7px;
+  }
+  .bar--b {
+    height: 5px;
+    background: var(--border-light);
+    margin-bottom: 4px;
+  }
+  .bar--c {
+    height: 5px;
+    width: 75%;
+    background: var(--border-light);
+  }
+  .thumb {
+    height: 38px;
+    border-radius: var(--r-glyph);
+    background: linear-gradient(135deg, var(--decor-grad-from), var(--decor-grad-to));
+    margin-bottom: 8px;
+  }
+  .bar--d {
+    height: 6px;
+    width: 70%;
+    background: #e6e6ea;
+  }
+
+  /* Hide decorative cards where they would crowd the text */
+  @media (max-width: 1100px) {
+    .float-card {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero__content {
+      padding: 48px 0 64px;
+    }
+    .hero__title {
+      font-size: 56px;
+    }
+    .hero__sub {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero__title {
+      font-size: 44px;
+    }
+    .hero__cta .btn {
+      flex: 1 1 auto;
+    }
+  }
+</style>

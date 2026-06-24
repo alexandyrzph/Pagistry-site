@@ -1,0 +1,77 @@
+// ============================================================
+//  Buttons — shared `.btn` base plus colour variants.
+// ============================================================
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    background var(--transition),
+    color var(--transition);
+
+  // Dark (primary)
+  &-dark {
+    background: var(--ink);
+    color: #fff;
+    padding: 16px 30px;
+    border-radius: var(--r-button);
+    font-size: 16px;
+
+    &:hover {
+      background: #000;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+  }
+
+  // Ghost (on indigo)
+  &-ghost {
+    background: var(--on-indigo-fill);
+    color: #fff;
+    padding: 16px 28px;
+    border-radius: var(--r-button);
+    font-size: 16px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+    }
+  }
+
+  // White (on dark/indigo bands)
+  &-white {
+    background: #fff;
+    color: var(--ink);
+    padding: 16px 32px;
+    border-radius: var(--r-button);
+    font-size: 16px;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px -20px rgba(0, 0, 0, 0.18);
+    }
+  }
+
+  // Pill (nav CTA)
+  &-pill {
+    background: #fff;
+    color: var(--ink);
+    padding: 10px 18px;
+    border-radius: var(--r-button-sm);
+    font-size: 14.5px;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px -16px rgba(0, 0, 0, 0.16);
+    }
+  }
+}

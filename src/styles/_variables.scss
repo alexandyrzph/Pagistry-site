@@ -1,0 +1,13 @@
+// ============================================================
+//  SCSS variables — compile-time only (no CSS output).
+//  Design tokens that components consume live in _tokens.scss
+//  as CSS custom properties; these are for use inside SCSS.
+// ============================================================
+
+// Breakpoints
+$bp-md: 900px;
+$bp-sm: 560px;
+
+// Easings
+$ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-in: cubic-bezier(0.4, 0, 1, 1);

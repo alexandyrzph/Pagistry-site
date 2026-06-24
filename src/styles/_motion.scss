@@ -1,0 +1,221 @@
+// ============================================================
+//  Motion — keyframes, scroll reveal, page transitions, and
+//  the global reduced-motion safeguards.
+// ============================================================
+
+@use 'variables' as v;
+
+// Floating hero cards
+@keyframes pgFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translateY(-12px) rotate(var(--r, 0deg));
+  }
+}
+
+// Respect reduced-motion preference everywhere
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+// ------------------------------------------------------------
+//  Scroll reveal — elements fade/slide in as they enter view.
+//  Reduced-motion users get the content immediately (no flash).
+// ------------------------------------------------------------
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.7s v.$ease-out,
+      transform 0.7s v.$ease-out;
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+
+    &[data-reveal='scale'] {
+      transform: translateY(30px) scale(0.975);
+    }
+    &[data-reveal='fade'] {
+      transform: none;
+    }
+    &.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+// ------------------------------------------------------------
+//  Page transitions — native, zero-JS cross-document view
+//  transitions (real MPA navigation, no SPA router). Browsers
+//  without support just navigate normally.
+// ------------------------------------------------------------
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: pageOut 0.26s v.$ease-in both;
+  }
+  ::view-transition-new(root) {
+    animation: pageIn 0.42s v.$ease-out both;
+  }
+  @keyframes pageOut {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes pageIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+}
+
+// Reduced motion: skip the crossfade entirely (instant swap).
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+// ------------------------------------------------------------
+//  Leaving overlay — a branded "we're taking you there" screen
+//  that wipes up before navigating to the external app. (Native
+//  view transitions are same-origin only, so we show this.)
+// ------------------------------------------------------------
+.leave-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--ink);
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.35s ease,
+    visibility 0s linear 0.35s;
+
+  &__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.97);
+    transition:
+      opacity 0.4s ease,
+      transform 0.5s v.$ease-out;
+  }
+
+  &__text {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+}
+
+.page-leaving .leave-overlay {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s;
+
+  .leave-overlay__inner {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.1s;
+  }
+}
+
+.leave-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  &__glyph {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    width: 34px;
+    height: 34px;
+    padding: 5px;
+    background: var(--indigo);
+    border-radius: 9px;
+
+    i {
+      border-radius: 2px;
+      background: #fff;
+
+      &:nth-child(2),
+      &:nth-child(3) {
+        background: var(--logo-accent);
+      }
+    }
+  }
+
+  &__word {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+}
+
+.leave-dots {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 5px;
+
+  i {
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: currentColor;
+    animation: leaveDot 1s ease-in-out infinite;
+
+    &:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+  }
+}
+
+@keyframes leaveDot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}

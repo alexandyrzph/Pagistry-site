@@ -1,0 +1,493 @@
+---
+import Logo from './Logo.astro';
+import { SIGNUP_URL } from '../config';
+
+// Items shown in the desktop "Features" dropdown
+const featureItems = [
+  { icon: '✦', title: 'AI that builds pages', desc: 'Prompt whole pages onto the canvas.' },
+  { icon: '▦', title: 'Visual blocks', desc: 'Drag heroes, grids and forms.' },
+  { icon: '⛁', title: 'Built-in CMS', desc: 'Model content once, reuse everywhere.' },
+  { icon: '⟲', title: 'Components', desc: 'Save blocks, edits sync across pages.' },
+  { icon: '↗', title: 'One-click publish', desc: 'Live on your domain, instantly.' },
+];
+
+// Links shown in the mobile overlay menu
+const mobileLinks = [
+  { label: 'Features', href: '#features' },
+  { label: 'FAQ', href: '#faq' },
+  { label: 'Contact us', href: '#contact' },
+];
+---
+
+<nav class="nav" aria-label="Primary">
+  <Logo variant="onIndigo" />
+
+  <div class="nav__links">
+    <div class="nav-dd">
+      <button
+        class="nav-dd__trigger"
+        type="button"
+        aria-haspopup="true"
+        aria-controls="features-dd"
+      >
+        Features
+        <svg class="nav-dd__chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+          <path
+            d="M2.5 4.5 6 8l3.5-3.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+
+      <div class="features-dd" id="features-dd" role="menu">
+        {
+          featureItems.map((f, i) => (
+            <a class="dd-item" href="#features" role="menuitem" style={`--i:${i}`}>
+              <span class="dd-item__icon" aria-hidden="true">
+                {f.icon}
+              </span>
+              <span class="dd-item__text">
+                <span class="dd-item__title">{f.title}</span>
+                <span class="dd-item__desc">{f.desc}</span>
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Contact us</a>
+  </div>
+
+  <div class="nav__actions">
+    <a href={SIGNUP_URL} class="btn btn-pill nav__cta">Start free</a>
+    <button
+      class="menu-trigger"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="menu-overlay"
+    >
+      <span class="menu-trigger__bars"><i></i><i></i><i></i></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Expanding mobile menu overlay -->
+<div class="menu-overlay" id="menu-overlay" aria-hidden="true">
+  <div class="menu-backdrop" data-close></div>
+
+  <div class="menu-panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <button class="menu-close" type="button" aria-label="Close menu" data-close>
+      <i></i><i></i>
+    </button>
+
+    <nav class="menu-links" aria-label="Mobile">
+      {
+        mobileLinks.map((l, i) => (
+          <a href={l.href} style={`--i:${i}`}>
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a href={SIGNUP_URL} class="btn btn-dark menu-cta" style={`--i:${mobileLinks.length}`}>
+      Start building free →
+    </a>
+  </div>
+</div>
+
+<script>
+  // ---- Mobile overlay menu ----
+  const trigger = document.querySelector<HTMLButtonElement>('.menu-trigger');
+  const overlay = document.getElementById('menu-overlay');
+  if (trigger && overlay) {
+    const closers = overlay.querySelectorAll<HTMLElement>('[data-close]');
+    const links = overlay.querySelectorAll<HTMLAnchorElement>('.menu-links a, .menu-cta');
+
+    const open = () => {
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+
+    trigger.addEventListener('click', open);
+    closers.forEach((c) => c.addEventListener('click', close));
+    links.forEach((a) => a.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) close();
+    });
+  }
+</script>
+
+<style lang="scss">
+  .nav {
+    position: relative;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0;
+  }
+
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--on-indigo-link);
+  }
+  /* Only the top-level links — not the items inside the dropdown */
+  .nav__links > a {
+    transition: color var(--transition);
+  }
+  .nav__links > a:hover {
+    color: #fff;
+  }
+
+  .nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* ---------------- Features dropdown ---------------- */
+  .nav-dd {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  /* transparent bridge so the panel stays open while crossing the gap */
+  .nav-dd::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 380px;
+    height: 22px;
+  }
+  .nav-dd__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--on-indigo-link);
+    transition: color var(--transition);
+  }
+  .nav-dd:hover .nav-dd__trigger,
+  .nav-dd:focus-within .nav-dd__trigger {
+    color: #fff;
+  }
+  .nav-dd__chev {
+    transition: transform var(--transition);
+  }
+  .nav-dd:hover .nav-dd__chev,
+  .nav-dd:focus-within .nav-dd__chev {
+    transform: rotate(180deg);
+  }
+
+  .features-dd {
+    position: absolute;
+    top: calc(100% + 16px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 380px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 10px;
+    color: var(--ink);
+    box-shadow: 0 24px 54px -28px rgba(16, 16, 22, 0.26);
+    z-index: 60;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    /* grows open from the top edge, like the mobile panel */
+    clip-path: inset(0 0 100% 0 round 18px);
+    transition:
+      clip-path 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.25s ease 0.15s,
+      visibility 0s linear 0.5s;
+  }
+  .nav-dd:hover .features-dd,
+  .nav-dd:focus-within .features-dd {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    clip-path: inset(0 0 0 0 round 18px);
+    transition:
+      clip-path 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.2s ease,
+      visibility 0s;
+  }
+
+  .dd-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.35s ease,
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.15s ease;
+  }
+  .nav-dd:hover .dd-item,
+  .nav-dd:focus-within .dd-item {
+    opacity: 1;
+    transform: translateY(0);
+    /* stagger entrance, but keep hover (background) instant */
+    transition-delay: calc(0.12s + var(--i) * 0.045s),
+      calc(0.12s + var(--i) * 0.045s), 0s;
+  }
+  .dd-item:hover {
+    background: var(--lavender-surface);
+  }
+  .dd-item__icon {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--lavender-surface);
+    color: var(--indigo);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .dd-item__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .dd-item__title {
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .dd-item__desc {
+    font-size: 12.5px;
+    line-height: 1.3;
+    color: var(--text-muted);
+  }
+
+  /* ---------------- Mobile trigger ---------------- */
+  .menu-trigger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+      background var(--transition),
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+  .menu-trigger:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+  .menu-trigger__bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .menu-trigger__bars i {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+  }
+  .menu-trigger[aria-expanded='true'] {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+
+  /* ---------------- Expanding overlay ---------------- */
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    visibility: hidden;
+    pointer-events: none;
+    transition: visibility 0s linear 0.6s;
+  }
+  .menu-overlay.is-open {
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+
+  .menu-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(16, 16, 22, 0.5);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+  .menu-overlay.is-open .menu-backdrop {
+    opacity: 1;
+  }
+
+  .menu-panel {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: min(380px, calc(100% - 28px));
+    background: #f4f3f6;
+    border-radius: 30px;
+    padding: 84px 28px 28px;
+    box-shadow: 0 30px 64px -32px rgba(0, 0, 0, 0.26);
+    opacity: 0;
+    clip-path: inset(0 0 calc(100% - 60px) calc(100% - 60px) round 30px);
+    transition:
+      clip-path 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.25s ease 0.32s;
+  }
+  .menu-overlay.is-open .menu-panel {
+    opacity: 1;
+    clip-path: inset(0 0 0 0 round 30px);
+    transition:
+      clip-path 0.58s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.18s ease;
+  }
+
+  .menu-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: rgba(16, 16, 22, 0.04);
+    border: 1px solid rgba(16, 16, 22, 0.18);
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+      background var(--transition),
+      transform var(--transition);
+  }
+  .menu-close:hover {
+    background: rgba(16, 16, 22, 0.08);
+  }
+  .menu-close i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 2px;
+    margin: -1px 0 0 -9px;
+    background: var(--ink);
+    border-radius: 2px;
+    transform: rotate(0deg);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.18s;
+  }
+  .menu-overlay.is-open .menu-close i:nth-child(1) {
+    transform: rotate(45deg);
+  }
+  .menu-overlay.is-open .menu-close i:nth-child(2) {
+    transform: rotate(-45deg);
+  }
+
+  .menu-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .menu-links a {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.18;
+    color: var(--ink);
+    transition:
+      color var(--transition),
+      transform var(--transition);
+  }
+  .menu-links a:hover {
+    color: var(--indigo);
+    transform: translateX(4px);
+  }
+
+  .menu-cta {
+    width: 100%;
+    margin-top: 26px;
+  }
+
+  /* Staggered entrance for panel contents */
+  .menu-links a,
+  .menu-cta {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.4s ease,
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .menu-overlay.is-open .menu-links a,
+  .menu-overlay.is-open .menu-cta {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(0.18s + var(--i) * 0.055s);
+  }
+
+  @media (max-width: 900px) {
+    .nav__links {
+      display: none;
+    }
+    .nav__cta {
+      display: none;
+    }
+    .menu-trigger {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .menu-links a {
+      font-size: 30px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-panel,
+    .menu-links a,
+    .menu-cta,
+    .menu-close i,
+    .features-dd,
+    .dd-item {
+      transition-delay: 0s !important;
+    }
+  }
+</style>

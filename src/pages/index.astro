@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import EditorMock from '../components/EditorMock.astro';
+import Features from '../components/Features.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Faq from '../components/Faq.astro';
+import Contact from '../components/Contact.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout>
+  <Hero />
+
+  <!-- Product editor mock, lifted to overlap the bottom of the hero band -->
+  <section class="showcase">
+    <div class="container">
+      <div class="showcase__mock" data-reveal="scale">
+        <EditorMock />
+      </div>
+    </div>
+  </section>
+
+  <Features />
+  <HowItWorks />
+  <Faq />
+  <Contact />
+  <Cta />
+  <Footer />
+</Layout>
+
+<style lang="scss">
+  .showcase {
+    background: #fff;
+    padding: 0 0 84px;
+  }
+  .showcase__mock {
+    position: relative;
+    z-index: 10;
+    margin-top: -40px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (max-width: 900px) {
+    .showcase {
+      padding: 0 0 56px;
+    }
+    .showcase__mock {
+      margin-top: -24px;
+    }
+  }
+</style>

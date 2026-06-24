@@ -1,0 +1,65 @@
+// ============================================================
+//  Design tokens — exposed as CSS custom properties so the
+//  scoped component styles can consume them via var(--token).
+//  Values are from the "Bold & Vivid" handoff.
+// ============================================================
+
+:root {
+  // Brand
+  --indigo: #5b3df5;
+  --lavender-surface: #f0edff;
+  --logo-accent: #c9c0ff;
+  --decor-grad-from: #ede9ff;
+  --decor-grad-to: #d9d0ff;
+
+  // Ink / text
+  --ink: #16161d;
+  --text-body: #55555f;
+  --text-muted: #9a9aa3;
+  --footer-muted: #6e6e78;
+  --footer-link: #c4c4cc;
+  --dark-card-body: #a3a3ad;
+
+  // Surfaces
+  --surface-page: #fff;
+  --surface-gray: #f6f6f8;
+  --surface-offwhite: #fafafb;
+
+  // Borders
+  --border-light: #f0f0f3;
+  --border-card: #ececed;
+
+  // On-indigo whites
+  --on-indigo-link: rgba(255, 255, 255, 0.82);
+  --on-indigo-sub: rgba(255, 255, 255, 0.85);
+  --on-indigo-fill: rgba(255, 255, 255, 0.14);
+  --on-indigo-grid: rgba(255, 255, 255, 0.06);
+
+  // Radii
+  --r-button: 12px;
+  --r-button-sm: 9px;
+  --r-card: 20px;
+  --r-card-sm: 16px;
+  --r-pill: 999px;
+  --r-glyph: 7px;
+
+  // Shadows — soft and diffuse
+  --shadow-float: 0 22px 50px -24px rgba(0, 0, 0, 0.22);
+  --shadow-hover: 0 16px 36px -20px rgba(22, 22, 29, 0.14);
+
+  // Layout
+  --content-max: 1200px;
+  --pad-x: 56px;
+
+  // Type
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Geist', sans-serif;
+
+  // Motion
+  --transition: 150ms ease;
+
+  // Hero grid overlay
+  --grid-overlay:
+    linear-gradient(var(--on-indigo-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--on-indigo-grid) 1px, transparent 1px);
+}

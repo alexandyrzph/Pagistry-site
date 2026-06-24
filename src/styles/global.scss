@@ -1,0 +1,11 @@
+// ============================================================
+//  Pagistry — global stylesheet entry point.
+//  Pulls together the design tokens, base styles, button
+//  primitives, and motion utilities. Component-specific styles
+//  live in each .astro file's scoped <style lang="scss"> block.
+// ============================================================
+
+@use 'tokens';
+@use 'base';
+@use 'buttons';
+@use 'motion';

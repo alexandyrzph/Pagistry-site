@@ -1,0 +1,137 @@
+---
+import Logo from './Logo.astro';
+
+const columns = [
+  {
+    title: 'Product',
+    links: ['Builder', 'CMS', 'AI generation', 'Templates', 'Components'],
+  },
+  {
+    title: 'Company',
+    links: ['Contact'],
+  },
+];
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top" data-reveal>
+      <div class="footer__brand">
+        <Logo variant="onDark" />
+        <p class="footer__blurb">
+          The no-code builder with a real CMS and an AI that writes whole pages.
+          Drag, prompt, publish.
+        </p>
+      </div>
+
+      {
+        columns.map((col) => (
+          <nav class="footer__col" aria-label={col.title}>
+            <div class="footer__heading">{col.title}</div>
+            <div class="footer__links">
+              {col.links.map((l) => (
+                <a href="#">{l}</a>
+              ))}
+            </div>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="footer__bottom">
+      <div>© 2026 Pagistry. All rights reserved.</div>
+      <div class="footer__legal">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/gdpr">GDPR</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style lang="scss">
+  .footer {
+    background: var(--ink);
+    color: #fff;
+    padding: 64px 0 30px;
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer__blurb {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin: 16px 0 22px;
+    max-width: 24em;
+  }
+
+  .footer__heading {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--footer-muted);
+    margin-bottom: 16px;
+  }
+  .footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    font-size: 14.5px;
+  }
+  .footer__links a {
+    color: var(--footer-link);
+    transition: color var(--transition);
+  }
+  .footer__links a:hover {
+    color: #fff;
+  }
+
+  .footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 24px;
+    font-size: 13.5px;
+    color: var(--footer-muted);
+  }
+  .footer__legal {
+    display: flex;
+    gap: 24px;
+  }
+  .footer__legal a {
+    transition: color var(--transition);
+  }
+  .footer__legal a:hover {
+    color: var(--footer-link);
+  }
+
+  @media (max-width: 900px) {
+    .footer__top {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px 40px;
+    }
+    /* brand block spans the full width above the columns */
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer__top {
+      grid-template-columns: 1fr;
+    }
+    .footer__bottom {
+      flex-direction: column;
+      gap: 14px;
+      align-items: flex-start;
+    }
+  }
+</style>

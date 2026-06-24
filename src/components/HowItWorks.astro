@@ -1,0 +1,121 @@
+---
+const steps = [
+  {
+    n: '1',
+    title: 'Describe or drag',
+    body: 'Prompt the AI or drop blocks onto the canvas.',
+  },
+  {
+    n: '2',
+    title: 'Shape & connect',
+    body: 'Refine visually and wire content to the CMS.',
+  },
+  {
+    n: '3',
+    title: 'Publish',
+    body: "One click and you're live on your domain.",
+  },
+];
+---
+
+<section class="how" id="how">
+  <div class="container">
+    <header class="how__head" data-reveal>
+      <div class="how__eyebrow">How it works</div>
+      <h2 class="how__title">Three steps. One live site.</h2>
+    </header>
+
+    <div class="how__grid">
+      {
+        steps.map((s, i) => (
+          <article class="step" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+            <div class="step__num">{s.n}</div>
+            <h3 class="step__title">{s.title}</h3>
+            <p class="step__body">{s.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  .how {
+    padding: 84px 0;
+    background: var(--surface-offwhite);
+    border-top: 1px solid var(--border-light);
+
+    &__head {
+      text-align: center;
+      margin-bottom: 54px;
+    }
+    &__eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--indigo);
+      margin-bottom: 14px;
+    }
+    &__title {
+      font-family: var(--font-display);
+      font-size: 48px;
+      letter-spacing: -0.035em;
+      font-weight: 700;
+      margin: 0;
+    }
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+    }
+  }
+
+  .step {
+    background: #fff;
+    border: 1px solid var(--border-card);
+    border-radius: 18px;
+    padding: 30px;
+    transition:
+      transform var(--transition),
+      box-shadow var(--transition);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    &__num {
+      font-family: var(--font-display);
+      font-size: 46px;
+      color: var(--indigo);
+      line-height: 1;
+      margin-bottom: 18px;
+    }
+    &__title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 9px;
+    }
+    &__body {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text-body);
+      margin: 0;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .how {
+      padding: 64px 0;
+
+      &__title {
+        font-size: 36px;
+      }
+      &__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+</style>
