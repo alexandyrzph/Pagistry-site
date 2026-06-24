@@ -4,11 +4,17 @@ import Logo from './Logo.astro';
 const columns = [
   {
     title: 'Product',
-    links: ['Builder', 'CMS', 'AI generation', 'Templates', 'Components'],
+    links: [
+      { label: 'Builder', href: '#' },
+      { label: 'CMS', href: '#' },
+      { label: 'AI generation', href: '#' },
+      { label: 'Templates', href: '#' },
+      { label: 'Components', href: '#' },
+    ],
   },
   {
     title: 'Company',
-    links: ['Contact'],
+    links: [{ label: 'Contact', href: '#contact' }],
   },
 ];
 ---
@@ -30,7 +36,7 @@ const columns = [
             <div class="footer__heading">{col.title}</div>
             <div class="footer__links">
               {col.links.map((l) => (
-                <a href="#">{l}</a>
+                <a href={l.href}>{l.label}</a>
               ))}
             </div>
           </nav>
